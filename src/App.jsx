@@ -5,19 +5,19 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 
 function App() {
-  // theme handling unchanged
+  // theme handling
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('theme') === 'dark');
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
     localStorage.setItem('theme', darkMode ? 'dark' : 'light');
   }, [darkMode]);
 
-  // 🔑 FIX: keep auth in state so the app re-renders after login/logout
+  // auth in state so the app re-renders after login/logout
   const [token, setToken] = useState(localStorage.getItem('token') || '');
 
   const handleLoggedIn = (newToken) => {
     localStorage.setItem('token', newToken);
-    setToken(newToken);             // <- triggers rerender so "/" switches to Dashboard
+    setToken(newToken);             // triggers rerender so "/" switches to Dashboard
   };
 
   const handleLogout = () => {

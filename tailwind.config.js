@@ -7,6 +7,6 @@ module.exports = {
   theme: {
     extend: {},
   },
-  darkMode: 'class', // to support dark mode toggle
+  darkMode: 'class', 
   plugins: [],
 };

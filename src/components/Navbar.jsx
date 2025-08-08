@@ -1,4 +1,3 @@
-// src/components/Navbar.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,7 +24,7 @@ const Navbar = ({ onAddClick }) => {
     navigate('/login');
   };
 
-  // One class to make desktop buttons uniform size
+  // desktop buttons uniform size
   const desktopBtn =
     'h-10 px-4 inline-flex items-center justify-center rounded font-semibold text-sm transition';
 
@@ -43,7 +42,7 @@ const Navbar = ({ onAddClick }) => {
             Link Saver
           </h1>
 
-          {/* Mobile controls (no dropdown) */}
+          {/* Mobile controls */}
           <div className="flex items-center gap-2 md:hidden">
             {/* Add */}
             <button
@@ -78,7 +77,7 @@ const Navbar = ({ onAddClick }) => {
             </button>
           </div>
 
-          {/* Desktop / Tablet actions (uniform size) */}
+          {/* Desktop / Tablet actions */}
           <div className="hidden md:flex items-center gap-3">
             <button
               onClick={onAddClick}

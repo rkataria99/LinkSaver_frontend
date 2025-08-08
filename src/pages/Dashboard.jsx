@@ -28,8 +28,7 @@ function Dashboard() {
   const [saving, setSaving] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
 
-  // NEW: search state
-  const [search, setSearch] = useState('');
+    const [search, setSearch] = useState(''); // search state
 
   // dnd-kit sensors
   const sensors = useSensors(
@@ -58,7 +57,7 @@ function Dashboard() {
     fetchBookmarks();
   }, []);
 
-  // add bookmark (used by modal form)
+  // add bookmark
   const addBookmark = async (e) => {
     e.preventDefault();
     const tags = tagsInput.split(',').map((t) => t.trim()).filter(Boolean);
@@ -79,7 +78,7 @@ function Dashboard() {
       setTagsInput('');
       setShowAdd(false);
       toast.success('Bookmark added!');
-      fetchBookmarks(); // ensure latest from server
+      fetchBookmarks();
     } catch (err) {
       console.error('Add error:', err);
       toast.error(err.response?.data?.message || 'Failed to add bookmark');
@@ -110,7 +109,7 @@ function Dashboard() {
 
     const q = search.trim().toLowerCase();
     if (q) {
-      // Match at the start of a word in summary (word-boundary prefix)
+      // Match at the start of a word in summary
       const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       const prefixRe = new RegExp(`\\b${esc}`, 'i');
 
@@ -134,7 +133,7 @@ function Dashboard() {
   const visible = applyFilters(bookmarks);
   const visibleIds = visible.map((b) => b._id);
 
-  // reorder & persist
+  // reordering of bookmarks
   const persistOrder = async (list) => {
     const updates = list.map((b, position) => ({ _id: b._id, position }));
     try {
@@ -165,11 +164,11 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
-      {/* Navbar with Add button that opens the modal */}
+      {/* Navbar Add button */}
       <Navbar onAddClick={() => setShowAdd(true)} />
 
       <div className="w-full px-3 sm:px-4 lg:px-6 py-6">
-        {/* Search bar at the top */}
+        {/* Search bar */}
         <div className="mb-4">
           <div className="relative">
             <input
@@ -189,7 +188,7 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Tag chips instead of dropdown */}
+        {/* Tag chips */}
         {allTags.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-2">
             <TagChip
@@ -247,7 +246,7 @@ function Dashboard() {
 
 export default Dashboard;
 
-/* ------------ TagChip ------------- */
+/* TagChip */
 function TagChip({ label, active, onClick }) {
   return (
     <button
@@ -264,8 +263,7 @@ function TagChip({ label, active, onClick }) {
   );
 }
 
-
-/* ------------ Modal Component ------------- */
+/* Modal Component */
 function AddBookmarkModal({ url, tagsInput, setUrl, setTagsInput, onClose, onSubmit }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -332,7 +330,7 @@ function AddBookmarkModal({ url, tagsInput, setUrl, setTagsInput, onClose, onSub
   );
 }
 
-/* ------------ Sortable wrapper for a card ------------- */
+/* Sortable wrapper for a card */
 function SortableCard({ id, children }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
   const style = {

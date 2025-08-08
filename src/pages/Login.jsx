@@ -12,7 +12,6 @@ function Login({ onLoggedIn }) {
     e.preventDefault();
     setErr('');
 
-    // Optional: basic client-side check so we fail fast
     if (!email || !password) {
       setErr('Please enter email and password');
       return;
@@ -23,7 +22,7 @@ function Login({ onLoggedIn }) {
       const token = res.data?.token;
       if (!token) throw new Error('No token received');
       onLoggedIn(token);
-      navigate('/'); // root is your dashboard
+      navigate('/'); // root = dashboard
     } catch (error) {
       if (error.response) {
         const status = error.response.status;

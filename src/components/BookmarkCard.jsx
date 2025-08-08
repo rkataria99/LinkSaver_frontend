@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 function BookmarkCard({ bookmark, onDelete }) {
   const { url, title, tags = [], markdownContent, summary } = bookmark;
-  const [open, setOpen] = useState(false); // modal for full content
+  const [open, setOpen] = useState(false); 
   React.useEffect(() => {
   if (!open) return;
   const prev = document.body.style.overflow;
@@ -56,7 +56,7 @@ function BookmarkCard({ bookmark, onDelete }) {
         </div>
       )}
 
-      {/* Spacer so delete sits at bottom */}
+      {/* Spacer for delete at bottom */}
       <div className="flex-1" />
 
       {/* Delete */}
