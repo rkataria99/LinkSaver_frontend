@@ -1,24 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 function BookmarkCard({ bookmark, onDelete }) {
   const { url, title, tags = [], markdownContent, summary } = bookmark;
+  const [showFull, setShowFull] = useState(false);
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-4 rounded shadow-md">
+    <div className="bg-white dark:bg-gray-800 p-4 rounded shadow-md break-words">
       {/* Clickable Title or URL */}
       <h3 className="text-lg font-semibold break-words">
         <a
           href={url.startsWith('http') ? url : `https://${url}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-600 dark:text-blue-400 hover:underline"
+          className="text-blue-600 dark:text-blue-400 hover:underline break-all"
         >
           {title || url}
         </a>
       </h3>
 
-      {/* Plain URL as desc */}
-      <p className="text-sm text-gray-500 break-words">{url}</p>
+      {/* Plain URL */}
+      <p className="text-sm text-gray-500 break-all">{url}</p>
 
       {/* Markdown content */}
       {markdownContent && (
@@ -27,17 +28,27 @@ function BookmarkCard({ bookmark, onDelete }) {
 
       {/* Tags */}
       {tags.length > 0 && (
-        <p className="text-xs text-gray-400 mt-1">
-          Tags: {tags.join(', ')}
-        </p>
+        <p className="text-xs text-gray-400 mt-1">Tags: {tags.join(', ')}</p>
       )}
 
       {/* AI Summary */}
       {summary && (
-        <p className="mt-2 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+        <div className="mt-2 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap break-words">
           <span className="font-medium">Summary: </span>
-          {summary.length > 300 ? summary.substring(0, 300) + '...' : summary}
-        </p>
+          <span
+            className={!showFull ? 'line-clamp-5' : ''}
+          >
+            {summary}
+          </span>
+          {summary.length > 200 && (
+            <button
+              onClick={() => setShowFull(!showFull)}
+              className="ml-2 text-blue-500 hover:underline text-xs"
+            >
+              {showFull ? 'Show less' : 'Show more'}
+            </button>
+          )}
+        </div>
       )}
 
       {/* Delete Button */}
