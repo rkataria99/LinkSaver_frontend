@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import BookmarkCard from '../components/BookmarkCard';
+import Navbar from '../components/Navbar';
 import { toast } from 'react-toastify';
 
 // dnd-kit imports
@@ -141,13 +142,8 @@ function Dashboard({ toggleTheme }) {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white px-4 py-6">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Link Saver Dashboard</h1>
-        <div className="flex gap-4">
-          <button onClick={toggleTheme} className="px-3 py-1 bg-yellow-500 text-white rounded">Toggle Theme</button>
-          <button onClick={logout} className="px-3 py-1 bg-red-500 text-white rounded">Logout</button>
-        </div>
-      </div>
+      {/* Use the Navbar up top */}
+      <Navbar toggleTheme={toggleTheme} />
 
       {/* Add form */}
       <form onSubmit={addBookmark} className="flex flex-col sm:flex-row gap-3 mb-6">
