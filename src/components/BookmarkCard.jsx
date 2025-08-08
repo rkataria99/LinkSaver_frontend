@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 function BookmarkCard({ bookmark, onDelete }) {
   const { url, title, tags = [], markdownContent, summary } = bookmark;
   const [open, setOpen] = useState(false); 
-  React.useEffect(() => {
+  const [isDeleting, setIsDeleting] = useState(false); // loader for Delete
+
+  useEffect(() => {
   if (!open) return;
   const prev = document.body.style.overflow;
   document.body.style.overflow = 'hidden';
@@ -11,6 +15,16 @@ function BookmarkCard({ bookmark, onDelete }) {
 }, [open]);
 
   const displayUrl = url?.startsWith('http') ? url : `https://${url}`;
+
+  const handleDelete = async () => {
+    if (isDeleting) return;          
+    setIsDeleting(true);
+    try {
+      await onDelete?.(bookmark._id);
+    } finally {
+      setIsDeleting(false);          
+    }
+  };
 
   return (
     <div className="h-full flex flex-col rounded-lg bg-white dark:bg-gray-800 shadow p-4">
@@ -62,10 +76,19 @@ function BookmarkCard({ bookmark, onDelete }) {
       {/* Delete */}
       <div className="mt-3">
         <button
+          type='button'
           className="text-sm bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-          onClick={() => onDelete(bookmark._id)}
+          onClick={handleDelete}
+          disabled={isDeleting}
         >
-          Delete
+        {isDeleting ? (
+            <>
+              <FontAwesomeIcon icon={faSpinner} spin className="text-sm" />
+              Deleting…
+            </>
+          ) : (
+            'Delete'
+          )}
         </button>
       </div>
 
