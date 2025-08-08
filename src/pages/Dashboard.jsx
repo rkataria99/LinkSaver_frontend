@@ -107,17 +107,29 @@ function Dashboard() {
     if (filterTag !== 'All') {
       out = out.filter((b) => (b.tags || []).includes(filterTag));
     }
+
     const q = search.trim().toLowerCase();
     if (q) {
+      // Match at the start of a word in summary (word-boundary prefix)
+      const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const prefixRe = new RegExp(`\\b${esc}`, 'i');
+
       out = out.filter((b) => {
         const title = (b.title || '').toLowerCase();
         const urlStr = (b.url || '').toLowerCase();
-        const summary = (b.summary || '').toLowerCase();
-        return title.includes(q) || urlStr.includes(q) || summary.includes(q);
+        const summary = b.summary || '';
+
+        return (
+          title.includes(q) ||            // anywhere in title
+          urlStr.includes(q) ||           // anywhere in URL
+          prefixRe.test(summary)          // prefix at ANY word in summary
+        );
       });
     }
+
     return out;
   };
+
 
   const visible = applyFilters(bookmarks);
   const visibleIds = visible.map((b) => b._id);
@@ -172,7 +184,7 @@ function Dashboard() {
               className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
               fill="none"
             >
-              <path d="M21 21l-4.35-4.35M10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M21 21l-4.35-4.35M10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             </svg>
           </div>
         </div>
