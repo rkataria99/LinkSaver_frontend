@@ -253,7 +253,7 @@ function TagChip({ label, active, onClick }) {
     <button
       onClick={onClick}
       className={
-        'whitespace-nowrap rounded-full px-3 py-1 text-xs font-medium transition ' +
+        'whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium transition ' +
         (active
           ? 'bg-blue-600 text-white shadow'
           : 'bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600')
@@ -263,6 +263,7 @@ function TagChip({ label, active, onClick }) {
     </button>
   );
 }
+
 
 /* ------------ Modal Component ------------- */
 function AddBookmarkModal({ url, tagsInput, setUrl, setTagsInput, onClose, onSubmit }) {
