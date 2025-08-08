@@ -4,6 +4,8 @@ import axios from 'axios';
 import BookmarkCard from '../components/BookmarkCard';
 import Navbar from '../components/Navbar';
 import { toast } from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 import {
   DndContext,
@@ -27,8 +29,8 @@ function Dashboard() {
   const [filterTag, setFilterTag] = useState('All');
   const [saving, setSaving] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
-
-    const [search, setSearch] = useState(''); // search state
+  const [isAdding, setIsAdding] = useState(false); // loader for Add button
+  const [search, setSearch] = useState(''); // search state
 
   // dnd-kit sensors
   const sensors = useSensors(
@@ -60,9 +62,11 @@ function Dashboard() {
   // add bookmark
   const addBookmark = async (e) => {
     e.preventDefault();
+    if (isAdding) return; // guard against double-submit
     const tags = tagsInput.split(',').map((t) => t.trim()).filter(Boolean);
 
     try {
+      setIsAdding(true);
       const strippedUrl = url.replace(/^https?:\/\//, '');
       const encodedUrl = encodeURIComponent(strippedUrl);
       const summary = await fetch(`https://r.jina.ai/http://${encodedUrl}`).then((res) => res.text());
@@ -82,6 +86,8 @@ function Dashboard() {
     } catch (err) {
       console.error('Add error:', err);
       toast.error(err.response?.data?.message || 'Failed to add bookmark');
+    } finally {
+      setIsAdding(false);
     }
   };
 
@@ -238,6 +244,7 @@ function Dashboard() {
           setTagsInput={setTagsInput}
           onClose={() => setShowAdd(false)}
           onSubmit={addBookmark}
+          isAdding={isAdding}
         />
       )}
     </div>
@@ -264,7 +271,7 @@ function TagChip({ label, active, onClick }) {
 }
 
 /* Modal Component */
-function AddBookmarkModal({ url, tagsInput, setUrl, setTagsInput, onClose, onSubmit }) {
+function AddBookmarkModal({ url, tagsInput, setUrl, setTagsInput, onClose, onSubmit, isAdding }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* overlay */}
@@ -274,7 +281,8 @@ function AddBookmarkModal({ url, tagsInput, setUrl, setTagsInput, onClose, onSub
         <div className="mb-3 flex items-center justify-between">
           <h3 className="text-lg font-semibold">Add Bookmark</h3>
           <button
-            onClick={onClose}
+            onClick={onClose}       //{!isAdding ? onClose : undefined} if disabling close while adding
+            disabled={isAdding}
             className="rounded p-1 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700"
             aria-label="Close"
           >
@@ -313,15 +321,24 @@ function AddBookmarkModal({ url, tagsInput, setUrl, setTagsInput, onClose, onSub
             <button
               type="button"
               onClick={onClose}
+              disabled={isAdding}
               className="rounded border px-4 py-2 text-sm dark:border-gray-700"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="rounded bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+              disabled={isAdding}
+              className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm"
             >
-              Add
+              {isAdding ? (
+                <>
+                  <FontAwesomeIcon icon={faSpinner} spin className="mr-2 text-sm" />
+                  Adding…
+                </>
+              ) : (
+                'Add'
+              )}
             </button>
           </div>
         </form>
