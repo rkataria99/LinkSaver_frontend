@@ -141,9 +141,11 @@ function Dashboard({ toggleTheme }) {
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white px-4 py-6">
-      {/* Header */}
+      
       {/* Use the Navbar up top */}
+      <div className="mb-3">
       <Navbar toggleTheme={toggleTheme} />
+    </div>
 
       {/* Add form */}
       <form onSubmit={addBookmark} className="flex flex-col sm:flex-row gap-3 mb-6">
@@ -162,7 +164,8 @@ function Dashboard({ toggleTheme }) {
           onChange={(e) => setTagsInput(e.target.value)}
           className="w-full sm:w-80 p-2 rounded border dark:bg-gray-700"
         />
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">Add</button>
+        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded
+             w-24 sm:w-auto">Add</button>
       </form>
 
       {/* Filter */}
