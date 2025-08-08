@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 const Navbar = ({ onAddClick }) => {
   const navigate = useNavigate();
 
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(
     typeof window !== 'undefined' && localStorage.getItem('theme') === 'dark'
   );
@@ -26,6 +25,10 @@ const Navbar = ({ onAddClick }) => {
     navigate('/login');
   };
 
+  // One class to make desktop buttons uniform size
+  const desktopBtn =
+    'h-10 px-4 inline-flex items-center justify-center rounded font-semibold text-sm transition';
+
   return (
     <header className="sticky top-0 z-40 w-full shadow">
       <nav className="bg-gray-900 text-white px-4 py-3">
@@ -40,88 +43,66 @@ const Navbar = ({ onAddClick }) => {
             Link Saver
           </h1>
 
-          {/* Mobile controls */}
+          {/* Mobile controls (no dropdown) */}
           <div className="flex items-center gap-2 md:hidden">
-            {/* Add -> opens modal in Dashboard */}
+            {/* Add */}
             <button
               onClick={onAddClick}
-              className="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded font-semibold text-sm"
+              className="h-9 px-3 inline-flex items-center justify-center rounded font-semibold text-sm bg-blue-600 hover:bg-blue-500"
             >
               Add
             </button>
 
+            {/* Theme toggle */}
             <button
               onClick={() => setIsDarkMode((v) => !v)}
-              className="bg-gray-800 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm"
+              className="h-9 w-9 grid place-items-center rounded bg-gray-800 hover:bg-gray-700 text-lg"
+              aria-label="Toggle theme"
+              title={isDarkMode ? 'Switch to light' : 'Switch to dark'}
             >
               {isDarkMode ? '☀️' : '🌙'}
             </button>
 
+            {/* Logout icon button */}
             <button
-              onClick={() => setIsMobileMenuOpen((v) => !v)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded hover:bg-gray-800"
-              aria-label="Toggle menu"
+              onClick={logout}
+              className="h-9 w-9 grid place-items-center rounded bg-red-600 hover:bg-red-500"
+              aria-label="Logout"
+              title="Logout"
             >
-              {isMobileMenuOpen ? (
-                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none">
-                  <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              ) : (
-                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none">
-                  <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              )}
+              {/* logout icon */}
+              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none">
+                <path d="M16 17l5-5-5-5M21 12H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M13 21H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
             </button>
           </div>
 
-          {/* Desktop actions */}
+          {/* Desktop / Tablet actions (uniform size) */}
           <div className="hidden md:flex items-center gap-3">
             <button
               onClick={onAddClick}
-              className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded font-semibold"
+              className={`${desktopBtn} bg-blue-600 hover:bg-blue-500`}
             >
               Add
             </button>
 
             <button
               onClick={() => setIsDarkMode((v) => !v)}
-              className="ml-1 px-3 py-1 rounded bg-gray-800 hover:bg-gray-700 text-sm"
+              className={`${desktopBtn} bg-gray-800 hover:bg-gray-700`}
+              title={isDarkMode ? 'Switch to light' : 'Switch to dark'}
             >
               {isDarkMode ? '☀️ Light' : '🌙 Dark'}
             </button>
 
             <button
               onClick={logout}
-              className="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded font-semibold"
+              className={`${desktopBtn} bg-red-600 hover:bg-red-500`}
             >
               Logout
             </button>
           </div>
         </div>
-
-        {/* Mobile dropdown (minimal) */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden mt-3 space-y-2">
-            <button
-              onClick={() => { onAddClick?.(); setIsMobileMenuOpen(false); }}
-              className="w-full bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded font-semibold"
-            >
-              Add
-            </button>
-            <button
-              onClick={() => { setIsDarkMode((v) => !v); setIsMobileMenuOpen(false); }}
-              className="w-full bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm"
-            >
-              {isDarkMode ? '☀️ Light' : '🌙 Dark'}
-            </button>
-            <button
-              onClick={() => { setIsMobileMenuOpen(false); logout(); }}
-              className="w-full bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded font-semibold"
-            >
-              Logout
-            </button>
-          </div>
-        )}
       </nav>
     </header>
   );
