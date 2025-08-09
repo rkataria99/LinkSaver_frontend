@@ -1,5 +1,6 @@
 // src/api.js
 import axios from 'axios';
+console.log('[API_BASE]', import.meta.env.VITE_API_URL); // TEMP LOG
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
