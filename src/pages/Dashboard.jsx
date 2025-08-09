@@ -40,7 +40,7 @@ function Dashboard() {
   // load & sort
   const fetchBookmarks = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/bookmarks', {
+      const res = await axios.get('/bookmarks', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       const sorted = [...res.data].sort(
@@ -72,7 +72,7 @@ function Dashboard() {
       const summary = await fetch(`https://r.jina.ai/http://${encodedUrl}`).then((res) => res.text());
 
       const res = await axios.post(
-        'http://localhost:5000/api/bookmarks',
+        '/bookmarks',
         { url, tags, summary },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );
@@ -94,7 +94,7 @@ function Dashboard() {
   // delete
   const deleteBookmark = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/bookmarks/${id}`, {
+      await axios.delete(`/bookmarks/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       setBookmarks((prev) => prev.filter((b) => b._id !== id));
@@ -145,7 +145,7 @@ function Dashboard() {
     try {
       setSaving(true);
       await axios.put(
-        'http://localhost:5000/api/bookmarks/reorder',
+        '/bookmarks/reorder',
         { updates },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );

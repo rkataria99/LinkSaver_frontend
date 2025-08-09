@@ -18,7 +18,7 @@ function Login({ onLoggedIn }) {
     }
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const res = await axios.post('/auth/login', { email, password });
       const token = res.data?.token;
       if (!token) throw new Error('No token received');
       onLoggedIn(token);
