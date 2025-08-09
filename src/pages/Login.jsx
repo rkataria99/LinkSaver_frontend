@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+//import axios from 'axios';
+import api from '../api';
 
 function Login({ onLoggedIn }) {
   const [email, setEmail] = useState('');
@@ -18,7 +19,7 @@ function Login({ onLoggedIn }) {
     }
 
     try {
-      const res = await axios.post('/auth/login', { email, password });
+      const res = await api.post('/auth/login', { email, password });
       const token = res.data?.token;
       if (!token) throw new Error('No token received');
       onLoggedIn(token);

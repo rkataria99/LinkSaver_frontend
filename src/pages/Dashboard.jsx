@@ -1,6 +1,7 @@
 // client/src/pages/Dashboard.jsx
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import api from '../api';
 import BookmarkCard from '../components/BookmarkCard';
 import Navbar from '../components/Navbar';
 import { toast } from 'react-toastify';
@@ -40,9 +41,7 @@ function Dashboard() {
   // load & sort
   const fetchBookmarks = async () => {
     try {
-      const res = await axios.get('/bookmarks', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      const res = await api.get('/bookmarks');
       const sorted = [...res.data].sort(
         (a, b) =>
           (a.position ?? 0) - (b.position ?? 0) ||
@@ -71,11 +70,7 @@ function Dashboard() {
       const encodedUrl = encodeURIComponent(strippedUrl);
       const summary = await fetch(`https://r.jina.ai/http://${encodedUrl}`).then((res) => res.text());
 
-      const res = await axios.post(
-        '/bookmarks',
-        { url, tags, summary },
-        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
-      );
+      const res = await api.post('/bookmarks', { url, tags, summary });
 
       setBookmarks((prev) => [res.data, ...prev]);
       setUrl('');
@@ -94,9 +89,7 @@ function Dashboard() {
   // delete
   const deleteBookmark = async (id) => {
     try {
-      await axios.delete(`/bookmarks/${id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      await api.delete(`/bookmarks/${id}`);
       setBookmarks((prev) => prev.filter((b) => b._id !== id));
       toast.success('Bookmark deleted');
     } catch {
@@ -144,11 +137,7 @@ function Dashboard() {
     const updates = list.map((b, position) => ({ _id: b._id, position }));
     try {
       setSaving(true);
-      await axios.put(
-        '/bookmarks/reorder',
-        { updates },
-        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
-      );
+      await api.put('/bookmarks/reorder', { updates });
       toast.success('Order updated');
     } catch (e) {
       console.error('Reorder failed', e);
