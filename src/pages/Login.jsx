@@ -22,6 +22,7 @@ function Login({ onLoggedIn }) {
       const res = await api.post('/auth/login', { email, password });
       const token = res.data?.token;
       if (!token) throw new Error('No token received');
+      localStorage.setItem("token", token);
       onLoggedIn(token);
       navigate('/'); // root = dashboard
     } catch (error) {
